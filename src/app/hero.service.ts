@@ -28,19 +28,6 @@ export class HeroService {
     );
   }
 
-  // /** GET hero by id. Return `undefined` when id not found */
-  // getHeroNo404<Data>(id: number): Observable<Hero> {
-  //   const url = `${this.heroesUrl}/?id=${id}`;
-  //   return this.http.get<Hero[]>(url).pipe(
-  //     map(heroes => heroes[0]), // returns a {0|1} element array
-  //     tap(h => {
-  //       const outcome = h ? `fetched` : `did not find`;
-  //       this.log(`${outcome} hero id=${id}`);
-  //     }),
-  //     catchError(this.handleError<Hero>(`getHero id=${id}`))
-  //   );
-  // }
-
   /** GET hero by id. Will 404 if id not found */
   getHero(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
@@ -62,16 +49,6 @@ export class HeroService {
     );
   }
 
-  //////// Save methods //////////
-
-  /** POST: add a new hero to the server */
-  addHero(hero: Hero): Observable<Hero> {
-    return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
-      tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
-      catchError(this.handleError<Hero>("addHero"))
-    );
-  }
-
   /** DELETE: delete the hero from the server */
   deleteHero(hero: Hero | number): Observable<Hero> {
     const id = typeof hero === "number" ? hero : hero.id;
@@ -80,6 +57,14 @@ export class HeroService {
     return this.http.delete<Hero>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted hero id=${id}`)),
       catchError(this.handleError<Hero>("deleteHero"))
+    );
+  }
+
+  /** POST: add a new hero to the server */
+  addHero(hero: Hero): Observable<Hero> {
+    return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
+      tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
+      catchError(this.handleError<Hero>("addHero"))
     );
   }
 
