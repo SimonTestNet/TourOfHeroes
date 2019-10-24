@@ -1,58 +1,84 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { DashboardComponent } from './dashboard.component';
-import { HeroSearchComponent } from '../hero-search/hero-search.component';
-
-import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
-import { HEROES } from '../mock-heroes';
-import { HeroService } from '../hero.service';
-
-describe('DashboardComponent', () => {
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { HeroService } from "../hero.service";
+import { DashboardComponent } from "./dashboard.component";
+import { of } from "rxjs";
+import { By } from "@angular/platform-browser";
+import { RouterTestingModule } from "@angular/router/testing";
+describe("DashboardComponent", () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-  let heroService;
-  let getHeroesSpy;
-
-  beforeEach(async(() => {
-    heroService = jasmine.createSpyObj('HeroService', ['getHeroes']);
-    getHeroesSpy = heroService.getHeroes.and.returnValue( of(HEROES) );
-    TestBed.configureTestingModule({
-      declarations: [
-        DashboardComponent,
-        HeroSearchComponent
-      ],
-      imports: [
-        RouterTestingModule.withRoutes([])
-      ],
-      providers: [
-        { provide: HeroService, useValue: heroService }
-      ]
-    })
-    .compileComponents();
-
-  }));
-
   beforeEach(() => {
+    const heroServiceStub = { getHeroes: () => of([]) };
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [DashboardComponent],
+      providers: [{ provide: HeroService, useValue: heroServiceStub }]
+    });
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
-
-  it('should be created', () => {
+  it("can load instance", () => {
     expect(component).toBeTruthy();
   });
-
-  it('should display "Top Heroes" as headline', () => {
-    expect(fixture.nativeElement.querySelector('h3').textContent).toEqual('Top Heroes');
+  it("heroes defaults to: []", () => {
+    expect(component.heroes).toEqual([]);
+  });
+  describe("ngOnInit", () => {
+    it("makes expected calls", () => {
+      spyOn(component, "getHeroes").and.callThrough();
+      component.ngOnInit();
+      expect(component.getHeroes).toHaveBeenCalled();
+    });
+  });
+  describe("getHeroes", () => {
+    it("makes expected calls", () => {
+      const heroServiceStub: HeroService = fixture.debugElement.injector.get(
+        HeroService
+      );
+      spyOn(heroServiceStub, "getHeroes").and.callThrough();
+      component.getHeroes();
+      expect(heroServiceStub.getHeroes).toHaveBeenCalled();
+    });
   });
 
-  it('should call heroService', async(() => {
-    expect(getHeroesSpy.calls.any()).toBe(true);
-    }));
+  describe("render", () => {
+    beforeEach(() => {
+      const heroServiceStub = fixture.debugElement.injector.get(HeroService);
+      const initialHeroes = [
+        { id: 1, name: "A" },
+        { id: 2, name: "B" },
+        { id: 3, name: "C" },
+        { id: 4, name: "D" },
+        { id: 5, name: "E" },
+        { id: 6, name: "F" }
+      ];
+      spyOn(heroServiceStub, "getHeroes").and.returnValue(of(initialHeroes));
+      fixture.detectChanges();
+    });
 
-  it('should display 4 links', async(() => {
-    expect(fixture.nativeElement.querySelectorAll('a').length).toEqual(4);
-  }));
+    it("has the correct links", () => {
+      const links = fixture.debugElement
+        .queryAll(By.css("a"))
+        .map(element => element.nativeElement as HTMLAnchorElement);
+      expect(links.length).toBe(4);
 
+      const expectedHeroes = [
+        { id: 2, name: "B" },
+        { id: 3, name: "C" },
+        { id: 4, name: "D" },
+        { id: 5, name: "E" }
+      ];
+
+      const expectedHeroesAreRendered = expectedHeroes.every(hero =>
+        links.some(
+          link =>
+            link.attributes.getNamedItem("href").value ===
+              `/detail/${hero.id}` && link.innerHTML.includes(hero.name)
+        )
+      );
+      expect(expectedHeroesAreRendered).toBe(true);
+    });
+  });
 });
