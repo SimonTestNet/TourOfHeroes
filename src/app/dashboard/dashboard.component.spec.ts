@@ -9,7 +9,7 @@ describe("DashboardComponent", () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   beforeEach(() => {
-    const heroServiceStub = { getHeroes: () => of([]) };
+    const heroServiceStub = { getHeroes: () => ({ subscribe: () => ({}) }) };
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       schemas: [NO_ERRORS_SCHEMA],
@@ -43,42 +43,39 @@ describe("DashboardComponent", () => {
     });
   });
 
-  describe("render", () => {
-    beforeEach(() => {
-      const heroServiceStub = fixture.debugElement.injector.get(HeroService);
-      const initialHeroes = [
-        { id: 1, name: "A" },
-        { id: 2, name: "B" },
-        { id: 3, name: "C" },
-        { id: 4, name: "D" },
-        { id: 5, name: "E" },
-        { id: 6, name: "F" }
-      ];
-      spyOn(heroServiceStub, "getHeroes").and.returnValue(of(initialHeroes));
-      fixture.detectChanges();
-    });
+  it("renders the links with the right hrefs and names", () => {
+    const heroServiceStub = fixture.debugElement.injector.get(HeroService);
+    const initialHeroes = [
+      { id: 1, name: "A" },
+      { id: 2, name: "B" },
+      { id: 3, name: "C" },
+      { id: 4, name: "D" },
+      { id: 5, name: "E" },
+      { id: 6, name: "F" }
+    ];
+    spyOn(heroServiceStub, "getHeroes").and.returnValue(of(initialHeroes));
 
-    it("has the correct links", () => {
-      const links = fixture.debugElement
-        .queryAll(By.css("a"))
-        .map(element => element.nativeElement as HTMLAnchorElement);
-      expect(links.length).toBe(4);
+    fixture.detectChanges();
 
-      const expectedHeroes = [
-        { id: 2, name: "B" },
-        { id: 3, name: "C" },
-        { id: 4, name: "D" },
-        { id: 5, name: "E" }
-      ];
+    const links = fixture.debugElement
+      .queryAll(By.css("a"))
+      .map<HTMLAnchorElement>(element => element.nativeElement);
+    expect(links.length).toBe(4);
 
-      const expectedHeroesAreRendered = expectedHeroes.every(hero =>
-        links.some(
-          link =>
-            link.attributes.getNamedItem("href").value ===
-              `/detail/${hero.id}` && link.innerHTML.includes(hero.name)
-        )
-      );
-      expect(expectedHeroesAreRendered).toBe(true);
-    });
+    const expectedHeroes = [
+      { id: 2, name: "B" },
+      { id: 3, name: "C" },
+      { id: 4, name: "D" },
+      { id: 5, name: "E" }
+    ];
+
+    const expectedHeroesAreRendered = expectedHeroes.every(hero =>
+      links.some(
+        link =>
+          link.attributes.getNamedItem("href").value === `/detail/${hero.id}` &&
+          link.innerHTML.includes(hero.name)
+      )
+    );
+    expect(expectedHeroesAreRendered).toBe(true);
   });
 });
