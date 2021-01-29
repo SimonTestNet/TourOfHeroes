@@ -1,6 +1,16 @@
 # Tour of Heros (Tested)
 
-A work in progress to get a fully tested Tour of Heroes example app.
+This is the Tour of Heroes example app fully tested using best practices. It can be used to learn better ways to test Angular components and services or as reference guide.
+
+For more information on testing each individual component check these articles:
+
+- [MessagesComponent](https://medium.com/@SimonTestNet/testing-the-tour-of-heroes-messages-component-bf9d000a1205?source=your_stories_page---------------------------)
+- [DashboardComponent](https://blog.simontest.net/testing-the-tour-of-heroes-03-dashboardcomponent-6c996faa5476?source=your_stories_page---------------------------)
+- [HeroDetailComponent](https://itnext.io/testing-the-tour-of-heros-herodetailcomponent-447d49494411?source=your_stories_page---------------------------)
+- [HeroSearchComponent](https://itnext.io/testing-the-tour-of-heroes-hero-search-component-c5b379e93fd3?source=your_stories_page---------------------------)
+- [HeroesComponent](https://medium.com/@SimonTestNet/testing-the-tour-of-heroes-heroes-component-b6c4bdbffa99?source=your_stories_page---------------------------)
+- [MessageService](https://blog.simontest.net/testing-the-tour-of-heroes-01-messageservice-f1d735a18692?source=your_stories_page---------------------------)
+- [HeroService](https://blog.simontest.net/testing-the-tour-of-heroes-02-heroservice-ead77adeb894?source=your_stories_page---------------------------)
 
 ## Get the Code
 
@@ -10,17 +20,11 @@ cd TourOfHeroes
 npm i
 ```
 
-## Run the app
+## npm scripts
 
-`npm run start`
-
-## Run unit tests (Karma)
-
-`npm run test`
-
-## Run end-to-end tests (Protractor)
-
-`npm run e2e`
+- `start`: Run the app
+- `test`: Run the unit tests using Karma
+- `coverage`: Run the tests and generate a coverage report
 
 ## Test Generator
 

@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Location } from "@angular/common";
-import { HeroService } from "../hero.service";
-import { HeroDetailComponent } from "./hero-detail.component";
-import { By } from "@angular/platform-browser";
-import { of } from "rxjs";
-import { FormsModule } from "@angular/forms";
-describe("HeroDetailComponent", () => {
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { HeroService } from '../hero.service';
+import { HeroDetailComponent } from './hero-detail.component';
+import { By } from '@angular/platform-browser';
+import { of } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+describe('HeroDetailComponent', () => {
   let component: HeroDetailComponent;
   let fixture: ComponentFixture<HeroDetailComponent>;
   beforeEach(() => {
     const activatedRouteStub = () => ({
-      snapshot: { paramMap: { get: () => ({}) } }
+      snapshot: { paramMap: { get: () => ({}) } },
     });
     const locationStub = () => ({ back: () => ({}) });
     const heroServiceStub = () => ({
-      getHero: id => ({
-        subscribe: f => f({})
+      getHero: (id) => ({
+        subscribe: (f) => f({}),
       }),
-      updateHero: hero => ({ subscribe: f => f({}) })
+      updateHero: (hero) => ({ subscribe: (f) => f({}) }),
     });
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
@@ -28,124 +28,124 @@ describe("HeroDetailComponent", () => {
       providers: [
         { provide: ActivatedRoute, useFactory: activatedRouteStub },
         { provide: Location, useFactory: locationStub },
-        { provide: HeroService, useFactory: heroServiceStub }
-      ]
+        { provide: HeroService, useFactory: heroServiceStub },
+      ],
     });
     fixture = TestBed.createComponent(HeroDetailComponent);
     component = fixture.componentInstance;
   });
-  it("can load instance", () => {
+  it('can load instance', () => {
     expect(component).toBeTruthy();
   });
-  describe("ngOnInit", () => {
-    it("makes expected calls", () => {
-      spyOn(component, "getHero").and.callThrough();
+  describe('ngOnInit', () => {
+    it('makes expected calls', () => {
+      spyOn(component, 'getHero').and.callThrough();
       component.ngOnInit();
       expect(component.getHero).toHaveBeenCalled();
     });
   });
-  describe("getHero", () => {
-    it("makes expected calls", () => {
+  describe('getHero', () => {
+    it('makes expected calls', () => {
       const heroServiceStub: HeroService = fixture.debugElement.injector.get(
         HeroService
       );
-      spyOn(heroServiceStub, "getHero").and.callThrough();
+      spyOn(heroServiceStub, 'getHero').and.callThrough();
       component.getHero();
       expect(heroServiceStub.getHero).toHaveBeenCalled();
     });
   });
-  describe("goBack", () => {
-    it("makes expected calls", () => {
+  describe('goBack', () => {
+    it('makes expected calls', () => {
       const locationStub: Location = fixture.debugElement.injector.get(
         Location
       );
-      spyOn(locationStub, "back").and.callThrough();
+      spyOn(locationStub, 'back').and.callThrough();
       component.goBack();
       expect(locationStub.back).toHaveBeenCalled();
     });
   });
-  describe("save", () => {
-    it("makes expected calls", () => {
+  describe('save', () => {
+    it('makes expected calls', () => {
       const heroServiceStub: HeroService = fixture.debugElement.injector.get(
         HeroService
       );
-      spyOn(component, "goBack").and.callThrough();
-      spyOn(heroServiceStub, "updateHero").and.callThrough();
+      spyOn(component, 'goBack').and.callThrough();
+      spyOn(heroServiceStub, 'updateHero').and.callThrough();
       component.save();
       expect(component.goBack).toHaveBeenCalled();
       expect(heroServiceStub.updateHero).toHaveBeenCalled();
     });
   });
 
-  describe("Without a hero", () => {
+  describe('Without a hero', () => {
     it("Doesn't display anything", () => {
-      const heroServiceStub = TestBed.get(HeroService);
-      spyOn(heroServiceStub, "getHero").and.returnValue(of(undefined));
+      const heroServiceStub = TestBed.inject(HeroService);
+      spyOn(heroServiceStub, 'getHero').and.returnValue(of(undefined));
       fixture.detectChanges();
-      const anyDiv = fixture.debugElement.query(By.css("div"));
+      const anyDiv = fixture.debugElement.query(By.css('div'));
       expect(anyDiv).toBeFalsy();
     });
   });
 
-  describe("With hero", () => {
+  describe('With hero', () => {
     beforeEach(() => {
-      const heroServiceStub = TestBed.get(HeroService);
-      spyOn(heroServiceStub, "getHero").and.returnValue(
+      const heroServiceStub = TestBed.inject(HeroService);
+      spyOn(heroServiceStub, 'getHero').and.returnValue(
         of({
           id: 123,
-          name: "Alan"
+          name: 'Alan',
         })
       );
       fixture.detectChanges();
     });
-    it("Displays content when initialized with a hero", () => {
-      const anyDiv = fixture.debugElement.query(By.css("div"));
+    it('Displays content when initialized with a hero', () => {
+      const anyDiv = fixture.debugElement.query(By.css('div'));
       expect(anyDiv).toBeTruthy();
     });
-    it("Has header with hero name in uppercase", () => {
+    it('Has header with hero name in uppercase', () => {
       const header: HTMLHeadingElement = fixture.debugElement.query(
-        By.css("h2")
+        By.css('h2')
       ).nativeElement;
-      expect(header.textContent).toContain("ALAN Details");
+      expect(header.textContent).toContain('ALAN Details');
     });
-    it("Shows hero id", () => {
+    it('Shows hero id', () => {
       const div: HTMLDivElement = fixture.debugElement.query(
-        By.css("div div") // first inner div
+        By.css('div div') // first inner div
       ).nativeElement;
-      expect(div.textContent).toContain("id: 123");
+      expect(div.textContent).toContain('id: 123');
     });
-    it("Has input box with the name", async () => {
+    it('Has input box with the name', async () => {
       await fixture.whenStable();
       const input: HTMLInputElement = fixture.debugElement.query(
-        By.css("input")
+        By.css('input')
       ).nativeElement;
-      expect(input.value).toBe("Alan");
+      expect(input.value).toBe('Alan');
     });
-    it("Calls location.back() when go back button is clicked", () => {
-      const locationStub = TestBed.get(Location);
-      spyOn(locationStub, "back");
+    it('Calls location.back() when go back button is clicked', () => {
+      const locationStub = TestBed.inject(Location);
+      spyOn(locationStub, 'back');
       const button: HTMLButtonElement = fixture.debugElement.query(
-        By.css("button") // first button
+        By.css('button') // first button
       ).nativeElement;
       button.click();
       expect(locationStub.back).toHaveBeenCalled();
     });
-    it("Updates hero property when user types on the input", () => {
+    it('Updates hero property when user types on the input', () => {
       const input: HTMLInputElement = fixture.debugElement.query(
-        By.css("input")
+        By.css('input')
       ).nativeElement;
-      input.value = "ABC";
-      input.dispatchEvent(new Event("input"));
+      input.value = 'ABC';
+      input.dispatchEvent(new Event('input'));
       fixture.detectChanges();
-      expect(component.hero.name).toBe("ABC");
+      expect(component.hero.name).toBe('ABC');
     });
-    it("Updates hero then goes back when save button is clicked", () => {
-      const heroServiceStub = TestBed.get(HeroService);
-      spyOn(heroServiceStub, "updateHero").and.returnValue(of(undefined));
-      const locationStub = TestBed.get(Location);
-      spyOn(locationStub, "back");
+    it('Updates hero then goes back when save button is clicked', () => {
+      const heroServiceStub = TestBed.inject(HeroService);
+      spyOn(heroServiceStub, 'updateHero').and.returnValue(of(undefined));
+      const locationStub = TestBed.inject(Location);
+      spyOn(locationStub, 'back');
       const button: HTMLButtonElement = fixture.debugElement.queryAll(
-        By.css("button")
+        By.css('button')
       )[1].nativeElement; // second button
       button.click();
       expect(heroServiceStub.updateHero).toHaveBeenCalledWith(component.hero);
