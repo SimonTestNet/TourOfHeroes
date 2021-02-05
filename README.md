@@ -2,6 +2,17 @@
 
 This is the Tour of Heroes example app fully tested using best practices. It can be used to learn better ways to test Angular components and services or as reference guide.
 
+These are some of the concepts showcased in this repo:
+
+- Isolating the components
+  - Stubbing dependencies
+- Isolating tests
+  - Avoiding global variables
+  - Testing the UI of the components, not the code
+  - Reset components and dependencies before using them
+  - Faking the clock instead of delaying tests
+- Using Jasmine blocks to organize the tests
+
 For more information on testing each individual component check these articles:
 
 - [MessagesComponent](https://medium.com/@SimonTestNet/testing-the-tour-of-heroes-messages-component-bf9d000a1205?source=your_stories_page---------------------------)
