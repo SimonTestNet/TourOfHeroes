@@ -33,8 +33,8 @@ describe('MessagesComponent', () => {
   });
 
   it('Clicking the clear button calls clear on the message service', () => {
-    const messagesService = TestBed.get(MessageService);
-    messagesService.messages = [{}];
+    const messagesService = TestBed.inject(MessageService);
+    messagesService.messages = [''];
     spyOn(messagesService, 'clear');
     fixture.detectChanges();
     const button: HTMLButtonElement = fixture.debugElement.query(
@@ -47,7 +47,7 @@ describe('MessagesComponent', () => {
   });
 
   it('Displays each message in messages', () => {
-    const messagesService = TestBed.get(MessageService);
+    const messagesService = TestBed.inject(MessageService);
     messagesService.messages = ['Alan', 'Brito'];
     fixture.detectChanges();
     const divs: Array<HTMLDivElement> = fixture.debugElement

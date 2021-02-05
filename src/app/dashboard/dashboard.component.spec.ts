@@ -34,9 +34,7 @@ describe('DashboardComponent', () => {
   });
   describe('getHeroes', () => {
     it('makes expected calls', () => {
-      const heroServiceStub: HeroService = fixture.debugElement.injector.get(
-        HeroService
-      );
+      const heroServiceStub: HeroService = TestBed.inject(HeroService);
       spyOn(heroServiceStub, 'getHeroes').and.callThrough();
       component.getHeroes();
       expect(heroServiceStub.getHeroes).toHaveBeenCalled();
@@ -44,7 +42,7 @@ describe('DashboardComponent', () => {
   });
 
   it('renders the links with the right hrefs and names', () => {
-    const heroServiceStub = fixture.debugElement.injector.get(HeroService);
+    const heroServiceStub = TestBed.inject(HeroService);
     const initialHeroes = [
       { id: 1, name: 'A' },
       { id: 2, name: 'B' },

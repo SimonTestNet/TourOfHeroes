@@ -46,9 +46,7 @@ describe('HeroDetailComponent', () => {
   });
   describe('getHero', () => {
     it('makes expected calls', () => {
-      const heroServiceStub: HeroService = fixture.debugElement.injector.get(
-        HeroService
-      );
+      const heroServiceStub: HeroService = TestBed.inject(HeroService);
       spyOn(heroServiceStub, 'getHero').and.callThrough();
       component.getHero();
       expect(heroServiceStub.getHero).toHaveBeenCalled();
@@ -56,9 +54,7 @@ describe('HeroDetailComponent', () => {
   });
   describe('goBack', () => {
     it('makes expected calls', () => {
-      const locationStub: Location = fixture.debugElement.injector.get(
-        Location
-      );
+      const locationStub: Location = TestBed.inject(Location);
       spyOn(locationStub, 'back').and.callThrough();
       component.goBack();
       expect(locationStub.back).toHaveBeenCalled();
@@ -66,9 +62,7 @@ describe('HeroDetailComponent', () => {
   });
   describe('save', () => {
     it('makes expected calls', () => {
-      const heroServiceStub: HeroService = fixture.debugElement.injector.get(
-        HeroService
-      );
+      const heroServiceStub: HeroService = TestBed.inject(HeroService);
       spyOn(component, 'goBack').and.callThrough();
       spyOn(heroServiceStub, 'updateHero').and.callThrough();
       component.save();
